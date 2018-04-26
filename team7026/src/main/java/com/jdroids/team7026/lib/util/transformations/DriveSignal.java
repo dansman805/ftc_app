@@ -12,7 +12,7 @@ public class DriveSignal {
     public boolean breakMode;
 
     public DriveSignal(double left, double right) {
-        this(left, right, false);
+        this(left, right, true);
     }
 
     public DriveSignal(double left, double right, boolean breakMode) {
@@ -20,7 +20,7 @@ public class DriveSignal {
     }
 
     public DriveSignal(double frontLeft, double frontRight, double backLeft, double backRight) {
-        this(frontLeft, frontRight, backLeft, backRight, false);
+        this(frontLeft, frontRight, backLeft, backRight, true);
     }
 
     public DriveSignal(double frontLeft, double frontRight, double backLeft, double backRight,
