@@ -13,8 +13,8 @@ import java.util.Collection;
 // import java.util.List;
 import java.util.Map;
 
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import com.jdroids.externalresources.simplejson.parser.JSONParser;
+import com.jdroids.externalresources.simplejson.parser.ParseException;
 
 
 /**
@@ -25,7 +25,7 @@ public class JSONValue {
 	 * Parse JSON text into java object from the input source. 
 	 * Please use parseWithException() if you don't want to ignore the exception.
 	 * 
-	 * @see org.json.simple.parser.JSONParser#parse(Reader)
+	 * @see com.jdroids.externalresources.simplejson.parser.JSONParser#parse(Reader)
 	 * @see #parseWithException(Reader)
 	 * 
 	 * @param in

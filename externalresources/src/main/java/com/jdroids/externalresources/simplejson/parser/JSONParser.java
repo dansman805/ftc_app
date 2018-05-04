@@ -11,8 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.jdroids.externalresources.simplejson.JSONArray;
+import com.jdroids.externalresources.simplejson.JSONObject;
 
 
 /**

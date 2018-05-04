@@ -1,6 +1,6 @@
 package com.jdroids.team7026.ftc2017;
 
-import com.jdroids.team7026.lib.util.transformations.DriveSignal;
+import com.jdroids.team7026.lib.util.DriveSignal;
 
 public class MecanumDriveHelper {
     public DriveSignal angleDrive(double angle, double power, boolean breakMode) {//Angle in radians
