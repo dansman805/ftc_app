@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 26
@@ -28,15 +29,18 @@ repositories {
     flatDir {
         dirs rootProject.file('libs')
     }
+    mavenCentral()
 }
 
 dependencies {
     compile project(':externalresources')
-
     compile project(':FtcRobotController')
-    compile (name: 'RobotCore-release', ext: 'aar')
-    compile (name: 'Hardware-release', ext: 'aar')
-    compile (name: 'FtcCommon-release', ext: 'aar')
-    compile (name:'Analytics-release', ext:'aar')
-    compile (name:'WirelessP2p-release', ext:'aar')
+    compile(name: 'RobotCore-release', ext: 'aar')
+    compile(name: 'Hardware-release', ext: 'aar')
+    compile(name: 'FtcCommon-release', ext: 'aar')
+    compile(name: 'Analytics-release', ext: 'aar')
+    compile(name: 'WirelessP2p-release', ext: 'aar')
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    compile project(':endercv')
+    compile project(':openCVLibrary320')
 }
