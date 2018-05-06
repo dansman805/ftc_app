@@ -21,7 +21,7 @@ object Drive: Subsystem() {
 
     private var driveControlState : DriveControlState = DriveControlState.OPEN_LOOP
 
-    private object ControlLoop : Loop {
+    object ControlLoop : Loop {
         override fun onStart() {
             setOpenLoop(DriveSignal.NEUTRAL)
         }
@@ -45,6 +45,8 @@ object Drive: Subsystem() {
     }
 
     override fun start(opMode: OpMode) {
+        this.opMode = opMode
+
         frontLeftMotor = opMode.hardwareMap.get(DcMotorEx::class.java, "FrontLeft")
         frontRightMotor = opMode.hardwareMap.get(DcMotorEx::class.java, "FrontRight")
         backLeftMotor = opMode.hardwareMap.get(DcMotorEx::class.java, "BackLeft")
@@ -70,10 +72,6 @@ object Drive: Subsystem() {
     override fun zeroSensors() {
         setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER)
         setRunMode(DcMotor.RunMode.RUN_USING_ENCODER)
-    }
-
-    fun getLoop(): Loop {
-        return ControlLoop
     }
 
     fun setPower(frontLeft: Double, frontRight: Double, backLeft: Double, backRight: Double) {

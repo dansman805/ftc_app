@@ -9,7 +9,7 @@ import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
 
 
-class JewelDetector: Command {
+class DetectJewel: Command {
     enum class Color {
         RED, BLUE, NONE
     }

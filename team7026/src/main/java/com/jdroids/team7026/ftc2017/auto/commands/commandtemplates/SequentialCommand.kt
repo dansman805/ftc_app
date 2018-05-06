@@ -1,21 +1,26 @@
 package com.jdroids.team7026.ftc2017.auto.commands.commandtemplates
 
-abstract class SequentialCommand(private val commands: List<Command>) : Command {
+import com.qualcomm.robotcore.robot.Robot
+
+abstract class SequentialCommand(val commands: List<Command>) : Command {
+    var currentCommand = 0
+    var isFirstTimeRunningCommand = true
+
     override fun execute() {
-        for (command in commands) {
-            command.initialize()
+        if(isFirstTimeRunningCommand) {
+            commands[currentCommand].initialize()
+            isFirstTimeRunningCommand = false
+        }
 
-            while (!command.isFinished()) {
-                command.execute()
-            }
+        commands[currentCommand].execute()
 
-            command.end()
+        if(commands[currentCommand].isFinished()) {
+            commands[currentCommand].end()
+            currentCommand++
         }
     }
 
     override fun isFinished(): Boolean {
-        val finishedCommands = commands.filter {it.isFinished()}
-
-        return commands.size == finishedCommands.size
+        return currentCommand == commands.size
     }
 }

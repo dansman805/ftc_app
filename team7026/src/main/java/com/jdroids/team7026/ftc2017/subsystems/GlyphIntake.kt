@@ -40,7 +40,7 @@ object GlyphIntake: Subsystem() {
     private var topGrabberState: GrabberState? = null
     private var bottomGrabberState: GrabberState? = null
 
-    private object ControlLoop: Loop {
+    object ControlLoop: Loop {
         override fun onStart() {
             setBothGlyphLiftStates(LiftState.NEUTRAL)
         }
