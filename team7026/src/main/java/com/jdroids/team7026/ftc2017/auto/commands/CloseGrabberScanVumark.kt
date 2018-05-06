@@ -1,8 +1,10 @@
-package com.jdroids.team7026.ftc2017.auto.commands.commandtemplates
+package com.jdroids.team7026.ftc2017.auto.commands
 
-abstract class ParallelCommand(val commands: List<Command>) : Command {
-    var isFirstTime = true
-    var wasCommandEnded = Array(commands.size, { Int -> false})
+import com.jdroids.team7026.ftc2017.auto.commands.commandtemplates.ParallelCommand
+import com.jdroids.team7026.ftc2017.subsystems.GlyphIntake
+
+class CloseGrabberScanVumark: ParallelCommand(listOf(SetGrabberToState(GlyphIntake.GrabberState.CLOSED), ReadVumark())){
+    override fun initialize() {}
 
     override fun execute() {
         if (isFirstTime) {
@@ -24,9 +26,7 @@ abstract class ParallelCommand(val commands: List<Command>) : Command {
         }
     }
 
-    override fun end() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun end() {}
 
     override fun isFinished(): Boolean {
         val finishedCommands = commands.filter {it.isFinished()}
