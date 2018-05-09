@@ -6,6 +6,7 @@ import com.jdroids.team7026.ftc2017.subsystems.GlyphIntake
 import com.jdroids.team7026.ftc2017.subsystems.JewelSystem
 import com.jdroids.team7026.ftc2017.subsystems.Subsystem
 import com.jdroids.team7026.ftc2017.subsystems.loops.Loop
+import com.qualcomm.hardware.bosch.BNO055IMU
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
 
@@ -14,6 +15,9 @@ object Robot : Subsystem(){
     val drive = Drive
     val glyphIntake = GlyphIntake
     val jewelSystem = JewelSystem
+
+    //Miscellaneous Sensors
+    var imu: BNO055IMU? = null
 
     class GlobalValues {
         var vumark = RelicRecoveryVuMark.UNKNOWN
@@ -47,6 +51,18 @@ object Robot : Subsystem(){
 
     override fun start(opMode: OpMode) {
         this.opMode = opMode
+
+        imu = this.opMode?.hardwareMap?.get(BNO055IMU::class.java, "imu")
+
+        val parameters: BNO055IMU.Parameters = BNO055IMU.Parameters()
+
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"
+        parameters.loggingEnabled = true
+        parameters.loggingTag = "IMU"
+
+        imu!!.initialize(parameters)
 
         drive.start(this.opMode as OpMode)
         glyphIntake.start(this.opMode as OpMode)
