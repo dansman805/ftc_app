@@ -1,4 +1,7 @@
-include ':FtcRobotController', ':team7026', ':externalresources'
+include ':FtcRobotController'
+include ':team7026'
+include ':externalresources'
 include ':TeamCode'
 include ':endercv'
 include ':openCVLibrary320'
+include ':FTCDashboard'

@@ -17,7 +17,8 @@ object MecanumDriveHelper {
                     offset: Double = 0.0, breakMode: Boolean = false): DriveSignal {
         val power = Math.hypot(sidewaysVelocity, forwardsVelocity)
 
-        val currentRadians = Robot.imu!!.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX).toAngleUnit(AngleUnit.RADIANS).firstAngle
+        val currentRadians = Robot.imu!!.angularOrientation.toAxesReference(AxesReference.INTRINSIC).
+                toAxesOrder(AxesOrder.ZYX).toAngleUnit(AngleUnit.RADIANS).firstAngle
 
 
         val angle: Double = when (fieldOrientedDriveEnabled) {

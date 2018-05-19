@@ -9,4 +9,9 @@ class DriveSignal(var frontLeft: Double, var frontRight: Double, var backLeft: D
         return ("FL: " + frontLeft + ", FR: " + frontRight + ", BL: " + backLeft +
                 ", BR: " + backRight)
     }
+
+    companion object {
+        val NEUTRAL = DriveSignal(0.0, 0.0)
+        val BRAKE = DriveSignal(0.0, 0.0, true)
+    }
 }

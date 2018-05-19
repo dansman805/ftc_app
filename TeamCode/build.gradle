@@ -14,6 +14,7 @@ apply plugin: 'kotlin-android'
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compile project(':team7026')
+    compile project(':FTCDashboard')
 }
 repositories {
     mavenCentral()

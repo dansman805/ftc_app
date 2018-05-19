@@ -1,5 +1,7 @@
 package com.jdroids.team7026.ftc2017
 
+import com.acmerobotics.dashboard.RobotDashboard
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket
 import com.jdroids.team7026.ftc2017.auto.commands.DetectJewel
 import com.jdroids.team7026.ftc2017.subsystems.Drive
 import com.jdroids.team7026.ftc2017.subsystems.GlyphIntake
@@ -9,8 +11,15 @@ import com.jdroids.team7026.ftc2017.subsystems.loops.Loop
 import com.qualcomm.hardware.bosch.BNO055IMU
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
+
+
 
 object Robot : Subsystem(){
+    //Dashboard stuff
+    private val dashboard: RobotDashboard = RobotDashboard.getInstance()
+    var telemetryPacket = TelemetryPacket()
+
     //Subsystems
     val drive = Drive
     val glyphIntake = GlyphIntake
@@ -70,10 +79,14 @@ object Robot : Subsystem(){
     }
 
     override fun outputToTelemetry() {
+        telemetryPacket = TelemetryPacket()
+
         drive.outputToTelemetry()
         glyphIntake.outputToTelemetry()
         jewelSystem.outputToTelemetry()
         this.opMode?.telemetry?.update()
+
+        dashboard.sendTelemetryPacket(telemetryPacket)
     }
 
     override fun zeroSensors() {

@@ -23,6 +23,10 @@ class OnStoneTest: OpMode() {
         onStone.execute()
         Robot.ControlLoop.onLoop()
         Robot.outputToTelemetry()
+
+        if(onStone.isFinished()) {
+            stop()
+        }
     }
 
     override fun stop() {

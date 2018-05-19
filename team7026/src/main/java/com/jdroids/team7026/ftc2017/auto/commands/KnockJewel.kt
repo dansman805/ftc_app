@@ -5,7 +5,7 @@ import com.jdroids.team7026.ftc2017.subsystems.JewelSystem
 
 class KnockJewel(private val allianceColor: DetectJewel.Color): SequentialCommand(listOf(DetectJewel(),
         SetJewelKnocker(JewelSystem.JewelKnockerStates.CENTERED),
-        SetJewelArm(JewelSystem.JewelArmStates.DOWN), KnockJewel(allianceColor),
+        SetJewelArm(JewelSystem.JewelArmStates.DOWN), SetKnockerToHitRightJewel(allianceColor),
         SetJewelKnocker(JewelSystem.JewelKnockerStates.CENTERED),
         SetJewelArm(JewelSystem.JewelArmStates.UP),
         SetJewelKnocker(JewelSystem.JewelKnockerStates.KNOCK_LEFT_JEWEL))) {

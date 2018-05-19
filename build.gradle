@@ -14,4 +14,10 @@ buildscript {
     }
 }
 
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
 

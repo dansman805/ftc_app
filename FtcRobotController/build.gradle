@@ -2,8 +2,10 @@
 // build.gradle in FtcRobotController
 //
 apply plugin: 'com.android.library'
-
 android {
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
 
     defaultConfig {
         minSdkVersion 19
@@ -18,11 +20,13 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
 }
-
 repositories {
     flatDir {
         dirs '../libs'
     }
 }
-
 apply from: 'build.release.gradle'
+
+dependencies {
+    compile project(':FTCDashboard')
+}

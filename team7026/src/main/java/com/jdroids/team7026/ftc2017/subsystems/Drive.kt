@@ -5,6 +5,7 @@ import com.jdroids.team7026.ftc2017.subsystems.loops.Loop
 import com.jdroids.team7026.lib.util.DriveSignal
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.hardware.DcMotor
+import com.jdroids.team7026.ftc2017.Robot
 
 object Drive: Subsystem() {
     enum class DriveControlState {
@@ -62,11 +63,25 @@ object Drive: Subsystem() {
     }
 
     override fun outputToTelemetry() {
+        this.opMode?.telemetry?.addData("Drive Mode", driveControlState)
         this.opMode?.telemetry?.addData("Motor Powers",
                 "FL: " + frontLeftMotor?.power +
                 " FR: " + frontRightMotor?.power +
                 " BL: " + backLeftMotor?.power +
                 " BR: " + backRightMotor?.power)
+
+        Robot.telemetryPacket.put("Drive Mode", driveControlState)
+
+        Robot.telemetryPacket.put("Front Left Motor Power", frontLeftMotor?.power)
+        Robot.telemetryPacket.put("Front Right Motor Power", frontRightMotor?.power)
+        Robot.telemetryPacket.put("Back Left Motor Power", backLeftMotor?.power)
+        Robot.telemetryPacket.put("Back Right Motor Power", backRightMotor?.power)
+
+        Robot.telemetryPacket.put("Front Left Motor Position", frontLeftMotor?.currentPosition)
+        Robot.telemetryPacket.put("Front Right Motor Position   ", frontRightMotor?.currentPosition)
+        Robot.telemetryPacket.put("Back Left Motor Position", backLeftMotor?.currentPosition)
+        Robot.telemetryPacket.put("Back Right Motor Position", backRightMotor?.currentPosition)
+
     }
 
     override fun zeroSensors() {
@@ -74,7 +89,7 @@ object Drive: Subsystem() {
         setRunMode(DcMotor.RunMode.RUN_USING_ENCODER)
     }
 
-    fun setPower(frontLeft: Double, frontRight: Double, backLeft: Double, backRight: Double) {
+    private fun setPower(frontLeft: Double, frontRight: Double, backLeft: Double, backRight: Double) {
         frontLeftMotor?.power = frontLeft
         frontRightMotor?.power = frontRight
         backLeftMotor?.power = backLeft
@@ -91,7 +106,7 @@ object Drive: Subsystem() {
         setPower(signal.frontLeft, signal.frontRight, signal.backLeft, signal.backRight)
     }
 
-    fun setRunMode(runMode: DcMotor.RunMode) {
+    private fun setRunMode(runMode: DcMotor.RunMode) {
         frontLeftMotor?.mode = runMode
         frontRightMotor?.mode = runMode
         backLeftMotor?.mode = runMode
@@ -113,6 +128,17 @@ object Drive: Subsystem() {
         }
 
         isBrakeMode = on
+    }
+
+    fun lockBase() {
+        driveControlState = DriveControlState.BASE_LOCKED
+
+        baseLockPositions[0] = frontLeftMotor!!.currentPosition
+        baseLockPositions[1] = frontLeftMotor!!.currentPosition
+        baseLockPositions[2] = frontLeftMotor!!.currentPosition
+        baseLockPositions[3] = frontLeftMotor!!.currentPosition
+
+        setBrakeMode(true)
     }
 
 }

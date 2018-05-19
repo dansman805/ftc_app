@@ -43,4 +43,5 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compile project(':endercv')
     compile project(':openCVLibrary320')
+    compile project(':FTCDashboard')
 }
