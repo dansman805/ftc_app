@@ -1,15 +1,24 @@
 package com.jdroids.team7026.ftc2017.subsystems
 
+import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.jdroids.team7026.ftc2017.subsystems.loops.Loop
 import com.jdroids.team7026.lib.util.DriveSignal
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.jdroids.team7026.ftc2017.Robot
+import jaci.pathfinder.Pathfinder
+import jaci.pathfinder.Trajectory
+import jaci.pathfinder.Waypoint
+import jaci.pathfinder.followers.EncoderFollower
+import jaci.pathfinder.modifiers.TankModifier
+import com.qualcomm.robotcore.hardware.PIDCoefficients
+
+
 
 object Drive: Subsystem() {
     enum class DriveControlState {
-        OPEN_LOOP, BASE_LOCKED
+        OPEN_LOOP, BASE_LOCKED, FOLLOW_PATH
     }
 
     private var isBrakeMode = false
@@ -19,6 +28,16 @@ object Drive: Subsystem() {
     private var frontRightMotor: DcMotorEx? = null
     private var backLeftMotor: DcMotorEx? = null
     private var backRightMotor: DcMotorEx? = null
+
+    private val trajectoryConfig = Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,
+            Trajectory.Config.SAMPLES_HIGH, 0.05, 1.0, 1.0,
+            1.0)
+            /*max_velocity, max_acceleration, and max_jerk have to be replaced with real values.
+            Reference https://www.chiefdelphi.com/forums/showthread.php?p=1741216
+            for how to find these.
+             */
+    private var leftEncoderFollower: EncoderFollower? = null
+    private var rightEncoderFollower: EncoderFollower? = null
 
     private var driveControlState : DriveControlState = DriveControlState.OPEN_LOOP
 
@@ -36,6 +55,17 @@ object Drive: Subsystem() {
                     frontRightMotor?.targetPosition = baseLockPositions[1]
                     backLeftMotor?.targetPosition = baseLockPositions[2]
                     backRightMotor?.targetPosition = baseLockPositions[3]
+                }
+
+                DriveControlState.FOLLOW_PATH -> {
+                    frontLeftMotor!!.power = leftEncoderFollower!!.calculate(
+                            getLeftSideEncoderPositon())
+                    backLeftMotor!!.power = leftEncoderFollower!!.calculate(
+                            getLeftSideEncoderPositon())
+                    frontRightMotor!!.power = rightEncoderFollower!!.calculate(
+                            getRightSideEncoderPositon())
+                    backRightMotor!!.power = rightEncoderFollower!!.calculate(
+                            getRightSideEncoderPositon())
                 }
             }
         }
@@ -113,7 +143,7 @@ object Drive: Subsystem() {
         backRightMotor?.mode = runMode
     }
 
-    fun setBrakeMode (on: Boolean) {
+    private fun setBrakeMode (on: Boolean) {
         if (on && !isBrakeMode) {
             frontLeftMotor?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
             frontRightMotor?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
@@ -130,7 +160,7 @@ object Drive: Subsystem() {
         isBrakeMode = on
     }
 
-    fun lockBase() {
+    fun turnOnBaseLock() {
         driveControlState = DriveControlState.BASE_LOCKED
 
         baseLockPositions[0] = frontLeftMotor!!.currentPosition
@@ -141,4 +171,46 @@ object Drive: Subsystem() {
         setBrakeMode(true)
     }
 
+    @Config
+    object PathFollowingCoeffecients {
+        var PID_VALUES = PIDCoefficients(0.9, 0.0, 0.0)
+        var V = 1.0 //Has to be 1 over the max velocity
+        var A = 0.0
+    }
+
+    fun followPath(points: Array<Waypoint>) {
+        driveControlState = DriveControlState.FOLLOW_PATH
+
+        val trajectory = Pathfinder.generate(points, trajectoryConfig)
+        val modifier = TankModifier(trajectory).modify(0.5)
+        //Wheel base width has to be set to the real wheel base width
+
+        val leftTrajectory = modifier.leftTrajectory
+        val rightTrajectory = modifier.rightTrajectory
+
+        leftEncoderFollower = EncoderFollower(leftTrajectory)
+        rightEncoderFollower = EncoderFollower(rightTrajectory)
+
+        leftEncoderFollower!!.configurePIDVA(PathFollowingCoeffecients.PID_VALUES.p,
+                PathFollowingCoeffecients.PID_VALUES.i, PathFollowingCoeffecients.PID_VALUES.d,
+                PathFollowingCoeffecients.V, PathFollowingCoeffecients.A)
+        rightEncoderFollower!!.configurePIDVA(PathFollowingCoeffecients.PID_VALUES.p,
+                PathFollowingCoeffecients.PID_VALUES.i, PathFollowingCoeffecients.PID_VALUES.d,
+                PathFollowingCoeffecients.V, PathFollowingCoeffecients.A)
+
+        leftEncoderFollower!!.configureEncoder(getLeftSideEncoderPositon(), 70,
+                0.1016)
+        rightEncoderFollower!!.configureEncoder(getRightSideEncoderPositon(), 70,
+                0.1016)
+    }
+
+    fun isFinishedFollowingPath(): Boolean =
+            leftEncoderFollower!!.isFinished && rightEncoderFollower!!.isFinished
+
+    private fun getLeftSideEncoderPositon(): Int =
+            (frontLeftMotor!!.currentPosition + backLeftMotor!!.currentPosition)/2
+
+
+    private fun getRightSideEncoderPositon(): Int =
+            (frontRightMotor!!.currentPosition + backRightMotor!!.currentPosition)/2
 }

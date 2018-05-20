@@ -44,4 +44,5 @@ dependencies {
     compile project(':endercv')
     compile project(':openCVLibrary320')
     compile project(':FTCDashboard')
+    compile files('C:/Users/dansm/Desktop/Folders/Robotics/test_ftc_app/libs/Pathfinder-Java.jar')
 }
