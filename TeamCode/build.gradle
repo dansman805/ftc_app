@@ -12,9 +12,20 @@
 apply from: '../build.common.gradle'
 apply plugin: 'kotlin-android'
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    compile project(':team7026')
-    compile project(':FTCDashboard')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation project(':team7026')
+    implementation project(':FTCDashboard')
+    implementation files('../libs/Pathfinder-Java.jar')
+}
+android {
+
+    dexOptions {
+        keepRuntimeAnnotatedClasses false
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 repositories {
     mavenCentral()

@@ -22,7 +22,7 @@ apply plugin: 'com.android.application'
 android {
 
     compileSdkVersion 23
-    buildToolsVersion '25.0.3'
+    buildToolsVersion '27.0.3'
 
     signingConfigs {
         debug {
@@ -34,10 +34,16 @@ android {
     }
 
     defaultConfig {
+
+        dexOptions {
+            keepRuntimeAnnotatedClasses false
+        }
+
         applicationId 'com.qualcomm.ftcrobotcontroller'
         minSdkVersion 19
         targetSdkVersion 19
 
+        multiDexEnabled = true
         /**
          * We keep the versionCode and versionName of robot controller applications in sync with
          * the master information published in the AndroidManifest.xml file of the FtcRobotController
@@ -101,3 +107,7 @@ repositories {
     }
 }
 apply from: 'build.release.gradle'
+
+dependencies {
+    compile 'com.android.support:multidex:1.0.3'
+}
