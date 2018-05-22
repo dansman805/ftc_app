@@ -14,17 +14,19 @@ object MecanumDriveHelper {
 
     fun arcadeDrive(forwardsVelocity: Double, sidewaysVelocity: Double,
                     angularVelocity: Double, fieldOrientedDriveEnabled: Boolean = false,
-                    offset: Double = 0.0, breakMode: Boolean = false): DriveSignal {
+                    offset: Double = 0.0, brakeMode: Boolean = false): DriveSignal {
         val power = Math.hypot(sidewaysVelocity, forwardsVelocity)
 
-        val currentRadians = Robot.imu!!.angularOrientation.toAxesReference(AxesReference.INTRINSIC).
-                toAxesOrder(AxesOrder.ZYX).toAngleUnit(AngleUnit.RADIANS).firstAngle
 
-
-        val angle: Double = when (fieldOrientedDriveEnabled) {
-            true -> offset + Math.atan2(forwardsVelocity, sidewaysVelocity) - currentRadians - Math.PI / 4
-            false -> Math.atan2(forwardsVelocity, sidewaysVelocity) - Math.PI / 4
+        val currentRadians = if(fieldOrientedDriveEnabled) {
+            Robot.imu!!.angularOrientation.toAxesReference(AxesReference.INTRINSIC)
+                    .toAxesOrder(AxesOrder.ZYX).toAngleUnit(AngleUnit.RADIANS).firstAngle.toDouble()
         }
+        else {0.0}
+
+        val angle = offset + Math.atan2(forwardsVelocity, sidewaysVelocity) - currentRadians - Math.PI / 4
+
+
 
         return DriveSignal(
                 power * Math.cos(angle) - angularVelocity,

@@ -11,9 +11,13 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
-
+        multiDexEnabled = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
 
+
+    dexOptions {
+        keepRuntimeAnnotatedClasses false
     }
 
     buildTypes {
@@ -33,16 +37,17 @@ repositories {
 }
 
 dependencies {
-    compile project(':externalresources')
-    compile project(':FtcRobotController')
-    compile(name: 'RobotCore-release', ext: 'aar')
-    compile(name: 'Hardware-release', ext: 'aar')
-    compile(name: 'FtcCommon-release', ext: 'aar')
-    compile(name: 'Analytics-release', ext: 'aar')
-    compile(name: 'WirelessP2p-release', ext: 'aar')
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    compile project(':endercv')
-    compile project(':openCVLibrary320')
-    compile project(':FTCDashboard')
-    compile files('C:/Users/dansm/Desktop/Folders/Robotics/test_ftc_app/libs/Pathfinder-Java.jar')
+    implementation project(':externalresources')
+    implementation project(':FtcRobotController')
+    implementation(name: 'RobotCore-release', ext: 'aar')
+    implementation(name: 'Hardware-release', ext: 'aar')
+    implementation(name: 'FtcCommon-release', ext: 'aar')
+    implementation(name: 'Analytics-release', ext: 'aar')
+    implementation(name: 'WirelessP2p-release', ext: 'aar')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation project(':endercv')
+    implementation project(':openCVLibrary320')
+    implementation project(':FTCDashboard')
+    implementation files('../libs/Pathfinder-Java.jar')
+    implementation 'com.android.support:multidex:1.0.1'
 }

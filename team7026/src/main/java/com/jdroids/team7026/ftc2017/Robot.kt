@@ -77,8 +77,6 @@ object Robot : Subsystem(){
     }
 
     override fun outputToTelemetry() {
-        telemetryPacket = TelemetryPacket()
-
         drive.outputToTelemetry()
         glyphIntake.outputToTelemetry()
         jewelSystem.outputToTelemetry()
