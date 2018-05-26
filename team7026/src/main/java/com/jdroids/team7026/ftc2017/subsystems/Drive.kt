@@ -59,13 +59,13 @@ object Drive: Subsystem() {
 
                 DriveControlState.FOLLOW_PATH -> {
                     frontLeftMotor!!.power = leftEncoderFollower!!.calculate(
-                            getLeftSideEncoderPositon())
+                            getLeftSideEncoderPosition())
                     backLeftMotor!!.power = leftEncoderFollower!!.calculate(
-                            getLeftSideEncoderPositon())
+                            getLeftSideEncoderPosition())
                     frontRightMotor!!.power = rightEncoderFollower!!.calculate(
-                            getRightSideEncoderPositon())
+                            getRightSideEncoderPosition())
                     backRightMotor!!.power = rightEncoderFollower!!.calculate(
-                            getRightSideEncoderPositon())
+                            getRightSideEncoderPosition())
                 }
             }
         }
@@ -198,19 +198,19 @@ object Drive: Subsystem() {
                 PathFollowingCoeffecients.PID_VALUES.i, PathFollowingCoeffecients.PID_VALUES.d,
                 PathFollowingCoeffecients.V, PathFollowingCoeffecients.A)
 
-        leftEncoderFollower!!.configureEncoder(getLeftSideEncoderPositon(), 70,
+        leftEncoderFollower!!.configureEncoder(getLeftSideEncoderPosition(), 70,
                 0.1016)
-        rightEncoderFollower!!.configureEncoder(getRightSideEncoderPositon(), 70,
+        rightEncoderFollower!!.configureEncoder(getRightSideEncoderPosition(), 70,
                 0.1016)
     }
 
     fun isFinishedFollowingPath(): Boolean =
             leftEncoderFollower!!.isFinished && rightEncoderFollower!!.isFinished
 
-    private fun getLeftSideEncoderPositon(): Int =
+    private fun getLeftSideEncoderPosition(): Int =
             (frontLeftMotor!!.currentPosition + backLeftMotor!!.currentPosition)/2
 
 
-    private fun getRightSideEncoderPositon(): Int =
+    private fun getRightSideEncoderPosition(): Int =
             (frontRightMotor!!.currentPosition + backRightMotor!!.currentPosition)/2
 }
