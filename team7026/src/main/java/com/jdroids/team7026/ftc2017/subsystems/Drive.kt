@@ -43,6 +43,8 @@ object Drive: Subsystem() {
 
     object ControlLoop : Loop {
         override fun onStart() {
+            setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER)
+            setRunMode(DcMotor.RunMode.RUN_USING_ENCODER)
             setOpenLoop(DriveSignal.NEUTRAL)
         }
 
@@ -95,10 +97,8 @@ object Drive: Subsystem() {
     override fun outputToTelemetry() {
         this.opMode?.telemetry?.addData("Drive Mode", driveControlState)
         this.opMode?.telemetry?.addData("Motor Powers",
-                "FL: " + frontLeftMotor?.power +
-                " FR: " + frontRightMotor?.power +
-                " BL: " + backLeftMotor?.power +
-                " BR: " + backRightMotor?.power)
+                """FL: $frontLeftMotor?.power,  FR: $frontRightMotor?.power,
+                        BL: $backLeftMotor?.power, BR:  $backRightMotor?.power""")
 
         Robot.telemetryPacket.put("Drive Mode", driveControlState)
 
@@ -107,16 +107,25 @@ object Drive: Subsystem() {
         Robot.telemetryPacket.put("Back Left Motor Power", backLeftMotor?.power)
         Robot.telemetryPacket.put("Back Right Motor Power", backRightMotor?.power)
 
-        Robot.telemetryPacket.put("Front Left Motor Position", frontLeftMotor?.currentPosition)
-        Robot.telemetryPacket.put("Front Right Motor Position   ", frontRightMotor?.currentPosition)
-        Robot.telemetryPacket.put("Back Left Motor Position", backLeftMotor?.currentPosition)
-        Robot.telemetryPacket.put("Back Right Motor Position", backRightMotor?.currentPosition)
-
+        Robot.telemetryPacket.put("Front Left Motor Distance",
+                convertFromTicksToMeters(frontLeftMotor!!
+                        .currentPosition))
+        Robot.telemetryPacket.put("Front Right Motor Distance",
+                convertFromTicksToMeters(frontRightMotor!!.currentPosition))
+        Robot.telemetryPacket.put("Back Left Motor Distance",
+                convertFromTicksToMeters(backLeftMotor!!.currentPosition))
+        Robot.telemetryPacket.put("Back Right Motor Distance",
+                convertFromTicksToMeters(backRightMotor!!.currentPosition))
     }
 
     override fun zeroSensors() {
         setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER)
         setRunMode(DcMotor.RunMode.RUN_USING_ENCODER)
+    }
+
+    private fun convertFromTicksToMeters(ticks: Int): Double {
+        return ticks * Math.pow((Math.PI * 4 / 16 * 112 / 4 / 2.54).toInt().toDouble(), -1.0) / 1000
+        //Convert the amount of ticks to meters
     }
 
     private fun setPower(frontLeft: Double, frontRight: Double, backLeft: Double, backRight: Double) {

@@ -26,9 +26,11 @@ class DashboardTest: OpMode(){
     }
 
     @Config
-    object MagicValueTest {
-        var magicValue = 0.0
-        var testPIDCoefficients = PIDCoefficients(0.0, 0.0,0.0)
+    class MagicValueTest {
+        companion object {
+            @JvmField var magicValue = 0.0
+            @JvmField var testPIDCoefficients = PIDCoefficients(0.0, 0.0,0.0)
+        }
     }
 
     override fun loop() {

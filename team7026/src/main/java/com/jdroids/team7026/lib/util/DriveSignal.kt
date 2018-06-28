@@ -6,8 +6,7 @@ class DriveSignal(var frontLeft: Double, var frontRight: Double, var backLeft: D
             this(left, right, left, right, brakeMode)
 
     override fun toString(): String{
-        return ("FL: " + frontLeft + ", FR: " + frontRight + ", BL: " + backLeft +
-                ", BR: " + backRight)
+        return "FL: $frontLeft, FR: $frontRight, BL: $backLeft, BR: $backRight"
     }
 
     companion object {

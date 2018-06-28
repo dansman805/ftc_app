@@ -10,7 +10,7 @@ import com.jdroids.team7026.ftc2017.subsystems.Subsystem
 import com.jdroids.team7026.ftc2017.subsystems.loops.Loop
 import com.qualcomm.hardware.bosch.BNO055IMU
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
+import org.firstinspires.ftc.robotcore.external.navigation.*
 
 
 object Robot : Subsystem(){
@@ -26,15 +26,20 @@ object Robot : Subsystem(){
     //Miscellaneous Sensors
     var imu: BNO055IMU? = null
 
-    class GlobalValues {
+    object GlobalValues {
         var vumark = RelicRecoveryVuMark.UNKNOWN
         var jewelOnLeft = DetectJewel.Color.NONE
     }
 
-    val globalValues = GlobalValues()
+    val globalValues= GlobalValues
 
     //Helper classes
     val mecanumDriveHelper = MecanumDriveHelper
+
+    fun BNO055IMU.getOrientationInRadians(): Orientation{
+        return this.angularOrientation.toAxesReference(AxesReference.INTRINSIC).
+                toAxesOrder(AxesOrder.ZYX).toAngleUnit(AngleUnit.RADIANS)
+    }
 
     object ControlLoop: Loop {
         override fun onStart() {

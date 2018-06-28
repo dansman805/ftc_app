@@ -1,9 +1,7 @@
 package com.jdroids.team7026.ftc2017
 
 import com.jdroids.team7026.lib.util.DriveSignal
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
+import com.jdroids.team7026.ftc2017.Robot.getOrientationInRadians
 
 object MecanumDriveHelper {
     fun angleDrive(angle: Double, power: Double, brakeMode: Boolean = false): DriveSignal {
@@ -18,9 +16,8 @@ object MecanumDriveHelper {
         val power = Math.hypot(sidewaysVelocity, forwardsVelocity)
 
 
-        val currentRadians = if(fieldOrientedDriveEnabled) {
-            Robot.imu!!.angularOrientation.toAxesReference(AxesReference.INTRINSIC)
-                    .toAxesOrder(AxesOrder.ZYX).toAngleUnit(AngleUnit.RADIANS).firstAngle.toDouble()
+        val currentRadians= if(fieldOrientedDriveEnabled) {
+            Robot.imu!!.getOrientationInRadians().firstAngle.toDouble()
         }
         else {0.0}
 
